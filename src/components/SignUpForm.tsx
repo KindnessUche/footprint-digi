@@ -12,63 +12,12 @@ export default function SignUpForm() {
   const [state, action, pending] = useActionState(signup, undefined);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // };
-  // const resetForm = () => {
-  //   setFormData({
-  //     ...formData,
-  //     email: "",
-  //     password: "",
-  //   });
-  // };
-  // Mock sign-up function
-  // const handleSignUp = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   const newUser = {
-  //     id: Date.now(), // unique ID
-  //     name: `${formData.firstName} ${formData.lastName}`,
-  //     email: formData.email,
-  //     password: formData.password, // store plain password for mock
-  //   };
-
-  //   // Save user to localStorage
-  //   localStorage.setItem("mockUser", JSON.stringify(newUser));
-  //   alert("Sign up successful! You can now log in.");
-  //   router.push("/auth/sign-in");
-  // };
-
-  // Real sign up
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:3100/auth/sign-up", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Sign-up failed");
-      }
-
-      const data = await response.json();
-      // console.log("Signup successful:", data);
-      // setSuccess("Signup successful! You can now log in.");
-      setTimeout(() => {
-        router.push("/auth/sign-in");
-      }, 1500);
-    } catch (err: any) {
-      console.error("Signup error:", err.message);
-      // setError(err.message);
+  useEffect(() => {
+    if (state?.success) {
+      console.log("User logged in successfully:", state.user);
+      router.push("/scan");
     }
-  };
-
+  }, [state, router]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md space-y-6">
@@ -128,21 +77,32 @@ export default function SignUpForm() {
             <div>
               <p>Password must:</p>
               <ul className="text-red-500 text-sm">
-                {state.errors.password.map((error) => (
+                {state.errors.password.map((error: string) => (
                   <li key={error}>- {error}</li>
                 ))}
               </ul>
             </div>
           )}
           <button
-            disabled={pending}
             type="submit"
+            disabled={pending}
             className={`w-full ${
-              pending ? "bg-red-400" : "bg-red-500"
-            } hover:bg-red-600 text-white py-2 rounded mt-4 cursor-pointer`}
+              pending
+                ? "bg-red-400 hover:bg-red-400"
+                : "bg-red-500 hover:bg-red-600"
+            }  text-white py-2 rounded cursor-pointer mt-4`}
           >
-            Sign Up
+            Sign up
           </button>
+          {state?.success && (
+            <p
+              className={`text-sm ${
+                state.success ? "text-green-500" : "text-red-500"
+              } `}
+            >
+              {state.message}
+            </p>
+          )}
 
           <button className="w-full border py-2 rounded mt-2 flex justify-center items-center space-x-2 cursor-pointer">
             <FcGoogle className="text-xl" />

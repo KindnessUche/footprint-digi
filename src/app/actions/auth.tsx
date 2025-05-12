@@ -1,8 +1,11 @@
+"use server";
 import {
   SignupFormSchema,
   SigninFormSchema,
   FormState,
 } from "@/lib/definitions";
+import { createSession, deleteSession } from "@/lib/sessions";
+import { redirect } from "next/navigation";
 
 export async function signup(state: FormState, formData: FormData) {
   // const bcrypt = require("bcrypt");
@@ -27,13 +30,16 @@ export async function signup(state: FormState, formData: FormData) {
 
   // 3. Insert the user into the database or call an Auth Library's API
   try {
-    const response = await fetch("http://localhost:3100/auth/sign-up", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ firstName, lastName, email, password }),
-    });
+    const response = await fetch(
+      "https://digital-footprint-backend.onrender.com/auth/sign-up",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -41,27 +47,17 @@ export async function signup(state: FormState, formData: FormData) {
     }
 
     const data = await response.json();
-    return { success: true, message: "Sign-up successful" };
+    console.log("Server action received data:", data);
+    await createSession(data.data.token);
+
+    return {
+      success: true,
+      message: data.message,
+      user: data.data,
+    };
   } catch (error: any) {
     return { success: false, message: error.message };
   }
-
-  // const data = await db
-  //   .insert(users)
-  //   .values({
-  //     name,
-  //     email,
-  //     password: hashedPassword,
-  //   })
-  //   .returning({ id: users.id });
-
-  // const user = data[0];
-
-  // if (!user) {
-  //   return {
-  //     message: "An error occurred while creating your account.",
-  //   };
-  // }
 
   // TODO:
   // 4. Create user session
@@ -70,29 +66,24 @@ export async function signup(state: FormState, formData: FormData) {
 }
 
 export async function signin(state: FormState, formData: FormData) {
-  // Validate form fields
-  const validatedFields = SigninFormSchema.safeParse({
+  const field = {
     email: formData.get("email"),
     password: formData.get("password"),
-  });
-
-  // If any form fields are invalid, return early
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-    };
-  }
-
-  const { email, password } = validatedFields.data;
+  };
+  console.log(field);
+  const { email, password } = field;
 
   try {
-    const response = await fetch("http://localhost:3100/auth/sign-in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const response = await fetch(
+      "https://digital-footprint-backend.onrender.com/auth/sign-in",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -100,12 +91,20 @@ export async function signin(state: FormState, formData: FormData) {
     }
 
     const data = await response.json();
+    console.log("Server action received data:", data);
+    await createSession(data.data);
 
-    // Store the token in localStorage or a secure cookie
-    localStorage.setItem("token", data.data);
-
-    return { success: true, message: "Sign-in successful" };
+    return {
+      success: true,
+      message: data.message,
+      user: data.data, // or whatever the backend sends
+    };
   } catch (error: any) {
     return { success: false, message: error.message };
   }
+}
+
+export async function logout() {
+  await deleteSession();
+  return "logged out";
 }

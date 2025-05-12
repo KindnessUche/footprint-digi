@@ -52,3 +52,45 @@ export type FormState =
       message?: string;
     }
   | undefined;
+
+export type Recommendation = {
+  id: number;
+  finding_id: number;
+  recommendation: string;
+  action_url: string;
+  priority: "low" | "medium" | "high"; // adjust if needed
+  created_at: string;
+  updated_at: string;
+};
+
+export type Finding = {
+  id: number;
+  scan_id: number;
+  source: string;
+  data_type: string;
+  data_value: string;
+  sensitivity_level: "low" | "medium" | "high"; // adjust if needed
+  breach_date: string | null;
+  context: string | null;
+  created_at: string;
+  updated_at: string;
+  recommendations: Recommendation[];
+};
+
+export type FindingsGroup = {
+  breaches: Finding[];
+  profiles: Finding[];
+  exposed_data: Finding[];
+  insights: Finding[];
+  other: Finding[];
+};
+
+export type ScanResult = {
+  scan_id: number;
+  scan_type: string;
+  scan_value: string;
+  risk_score: number;
+  created_at: string;
+  findings: FindingsGroup;
+  all_findings: Finding[];
+};
