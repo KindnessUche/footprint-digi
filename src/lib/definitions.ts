@@ -92,5 +92,5 @@ export type ScanResult = {
   risk_score: number;
   created_at: string;
   findings: FindingsGroup;
-  all_findings: Finding[];
+  // findings: Finding[];
 };
