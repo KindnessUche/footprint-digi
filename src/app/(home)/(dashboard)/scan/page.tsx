@@ -14,7 +14,8 @@ export default function ScanPage() {
   const [scanId, setScanId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
-
+  const riskScore: number =
+    scanResult?.risk_score == undefined ? 0 : scanResult.risk_score;
   const handleScan = async () => {
     setLoading(true);
     try {
@@ -91,7 +92,7 @@ export default function ScanPage() {
             </button>
           </div>
         </div>
-        <RiskScoreCircle score={loading ? 0 : scanResult?.risk_score} />
+        <RiskScoreCircle score={riskScore} />
       </div>
       {scanResult && scanResult.all_findings?.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
