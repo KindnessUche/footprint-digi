@@ -1,7 +1,10 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest, params: { scanId: string }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { scanId: string } }
+) {
   const cookieStore = await cookies();
   const token = cookieStore.get("session");
 
