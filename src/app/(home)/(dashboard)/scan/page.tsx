@@ -74,7 +74,7 @@ export default function ScanPage() {
 
     try {
       const res = await fetch(`/api/genReport/${scanId}`, {
-        method: "GET",
+        method: "POST",
       });
 
       const data = await res.json();
