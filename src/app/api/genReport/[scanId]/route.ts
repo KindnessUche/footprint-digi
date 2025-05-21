@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(
-  req: NextRequest,
+export async function GET(
+  req: Request,
   { params }: { params: { scanId: string | null } }
 ) {
   const cookieStore = await cookies();
@@ -17,7 +17,6 @@ export async function POST(
   const backendRes = await fetch(
     `https://digital-footprint-backend.onrender.com/report/generate/${scanId}`,
     {
-      method: "POST",
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
