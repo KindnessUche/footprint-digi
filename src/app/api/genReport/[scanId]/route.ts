@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ scanId: string }> }
+  { params }: { params: { scanId: string } }
 ) {
   const cookieStore = await cookies();
   const token = cookieStore.get("session");
@@ -12,7 +12,7 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
   }
 
-  const { scanId } = await params;
+  const scanId = params.scanId;
 
   const backendRes = await fetch(
     `https://digital-footprint-backend.onrender.com/report/generate/${scanId}`,
