@@ -94,3 +94,9 @@ export type ScanResult = {
   findings: FindingsGroup;
   // findings: Finding[];
 };
+
+export interface ScanParams {
+  params: {
+    scanId: string;
+  };
+}
