@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { ScanParams } from "@/lib/definitions";
-export async function GET(req: NextRequest, { params }: ScanParams) {
+export async function GET(req: NextRequest, { params }: any) {
   const cookieStore = await cookies();
   const token = cookieStore.get("session");
 
