@@ -72,10 +72,19 @@ export default function ScanPage() {
     }
 
     try {
-      const res = await fetch(`/api/genReport/${scanId}`);
+      const res = await fetch(`/api/genReport/${scanId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        const errorText = await res.text();
+        showToast("Failed to generate report: " + errorText, "error");
+        return;
+      }
 
       const data = await res.json();
-
       if (res.ok && data.report_url) {
         // Construct full download URL
         const downloadUrl = `https://digital-footprint-backend.onrender.com${data.report_url}`;

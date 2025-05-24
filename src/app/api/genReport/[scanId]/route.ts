@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-export async function GET(req: NextRequest, { params }: any) {
+export async function POST(req: NextRequest, { params }: any) {
   const cookieStore = await cookies();
   const token = cookieStore.get("session");
 
