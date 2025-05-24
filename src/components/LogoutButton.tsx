@@ -1,20 +1,36 @@
 "use client";
-// import { cookies } from "next/headers";
+import { useState } from "react";
 import Link from "next/link";
 import React from "react";
 import { logout } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
-export default async function LogoutButton({
-  isLoggedIn,
-}: {
-  isLoggedIn: boolean;
-}) {
+import Toast from "@/components/Toast";
+
+export default function LogoutButton({ isLoggedIn }: { isLoggedIn: boolean }) {
   const router = useRouter();
+  const [open, setOpen] = useState(false); // Controls Snackbar
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<"success" | "error" | "info">(
+    "info"
+  );
 
   const handleLogout = async () => {
-    await logout();
-    router.push("/");
+    try {
+      await logout();
+      setMessage("Logged out successfully!");
+      setSeverity("success");
+      setOpen(true);
+      // Delay redirect slightly to let the toast show
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
+    } catch (error) {
+      setMessage("Logout failed. Please try again.");
+      setSeverity("error");
+      setOpen(true);
+    }
   };
+
   return (
     <>
       {isLoggedIn ? (
@@ -36,6 +52,13 @@ export default async function LogoutButton({
           </div>
         </Link>
       )}
+      {/* Toast Component */}
+      <Toast
+        open={open}
+        setOpen={setOpen}
+        message={message}
+        severity={severity}
+      />
     </>
   );
 }

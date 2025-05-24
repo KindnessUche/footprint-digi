@@ -33,10 +33,7 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const session = cookieStore.get("session");
   const isLoggedIn = !!session;
-  // const handleLogout = async () => {
-  //   logout();
-  //   window.location.href = "/";
-  // };
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body

@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { FaFacebookF, FaTwitter } from "react-icons/fa";
 import { ScanResult } from "@/lib/definitions";
 import Toast from "@/components/Toast";
-// import { jsPDF } from "jspdf";
 
 export default function ScanPage() {
   const [input, setInput] = useState("");
