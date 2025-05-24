@@ -1,9 +1,6 @@
 import { cookies } from "next/headers";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: Request, { params }: any) {
   const cookieStore = await cookies();
   const token = cookieStore.get("session");
   if (!token)
