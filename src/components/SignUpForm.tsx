@@ -1,23 +1,38 @@
 "use client";
+
 import { signup } from "@/app/actions/auth";
 import { useActionState } from "react";
-
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import Toast from "@/components/Toast";
 
 export default function SignUpForm() {
   const [state, action, pending] = useActionState(signup, undefined);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [severity, setSeverity] = useState<"success" | "error" | "info">(
+    "info"
+  );
+
   useEffect(() => {
-    if (state?.success) {
-      console.log("User logged in successfully:", state.user);
-      router.push("/scan");
+    if (state?.message) {
+      setToastMessage(state.message);
+      setSeverity(state.success ? "success" : "error");
+      setOpen(true);
+
+      if (state.success) {
+        setTimeout(() => {
+          router.push("/scan");
+        }, 1500);
+      }
     }
   }, [state, router]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md space-y-6">
@@ -58,6 +73,7 @@ export default function SignUpForm() {
           {state?.errors?.email && (
             <p className="text-red-500 text-sm">{state.errors.email}</p>
           )}
+
           <div className="relative mt-4 ">
             <input
               name="password"
@@ -83,6 +99,7 @@ export default function SignUpForm() {
               </ul>
             </div>
           )}
+
           <button
             type="submit"
             disabled={pending}
@@ -90,19 +107,10 @@ export default function SignUpForm() {
               pending
                 ? "bg-red-400 hover:bg-red-400"
                 : "bg-red-500 hover:bg-red-600"
-            }  text-white py-2 rounded cursor-pointer mt-4`}
+            } text-white py-2 rounded cursor-pointer mt-4`}
           >
             Sign up
           </button>
-          {state?.success && (
-            <p
-              className={`text-sm ${
-                state.success ? "text-green-500" : "text-red-500"
-              } `}
-            >
-              {state.message}
-            </p>
-          )}
 
           <button className="w-full border py-2 rounded mt-2 flex justify-center items-center space-x-2 cursor-pointer">
             <FcGoogle className="text-xl" />
@@ -111,7 +119,7 @@ export default function SignUpForm() {
         </form>
 
         <div className="text-center text-sm">
-          Already have an account?
+          Already have an account?{" "}
           <Link
             href="/auth/sign-in"
             className="text-red-500 hover:underline font-medium"
@@ -120,6 +128,12 @@ export default function SignUpForm() {
           </Link>
         </div>
       </div>
+      <Toast
+        open={open}
+        setOpen={setOpen}
+        message={toastMessage}
+        severity={severity}
+      />
     </div>
   );
 }

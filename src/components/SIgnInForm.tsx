@@ -1,19 +1,34 @@
 "use client";
+
 import Link from "next/link";
 import { useState, useEffect, useActionState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { signin } from "@/app/actions/auth";
+import Toast from "@/components/Toast";
+
 export default function SignInForm() {
   const [state, action, pending] = useActionState(signin, undefined);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [severity, setSeverity] = useState<"success" | "error" | "info">(
+    "info"
+  );
 
   useEffect(() => {
-    if (state?.success) {
-      console.log("User logged in successfully:", state.user);
-      router.push("/scan");
+    if (state?.message) {
+      setToastMessage(state.message);
+      setSeverity(state.success ? "success" : "error");
+      setOpen(true);
+
+      if (state.success) {
+        setTimeout(() => {
+          router.push("/scan");
+        }, 1500);
+      }
     }
   }, [state, router]);
 
@@ -31,6 +46,7 @@ export default function SignInForm() {
             required
             className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-400"
           />
+
           <div className="relative">
             <input
               name="password"
@@ -64,19 +80,10 @@ export default function SignInForm() {
               pending
                 ? "bg-red-400 hover:bg-red-400"
                 : "bg-red-500 hover:bg-red-600"
-            }  text-white py-2 rounded cursor-pointer`}
+            } text-white py-2 rounded cursor-pointer`}
           >
             Sign in
           </button>
-          {state && (
-            <p
-              className={`text-sm ${
-                state.success ? "text-green-500" : "text-red-500"
-              } `}
-            >
-              {state.message}
-            </p>
-          )}
 
           <button className="w-full border py-2 rounded flex justify-center items-center space-x-2">
             <FcGoogle className="text-xl" />
@@ -85,7 +92,7 @@ export default function SignInForm() {
         </form>
 
         <div className="text-center text-sm">
-          Don't have an account?
+          Don&apos;t have an account?{" "}
           <Link
             href="/auth/sign-up"
             className="text-red-500 hover:underline font-medium"
@@ -94,6 +101,13 @@ export default function SignInForm() {
           </Link>
         </div>
       </div>
+
+      <Toast
+        open={open}
+        setOpen={setOpen}
+        message={toastMessage}
+        severity={severity}
+      />
     </div>
   );
 }
