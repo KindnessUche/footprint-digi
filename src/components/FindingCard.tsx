@@ -10,7 +10,7 @@ type Recommendation = {
 type Finding = {
   source: string;
   data_value: string;
-  sensitivity_level: string;
+  sensitivity_level: "low" | "medium" | "high";
   recommendations: Recommendation[];
 };
 

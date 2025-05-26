@@ -3,9 +3,10 @@
 import RiskScoreCircle from "@/components/RiskScore";
 import SocialMediaCard from "@/components/SocialMediaCard";
 import { useEffect, useState } from "react";
-// import { scanResult } from "@/components/index";
+import { fakeScanResult } from "@/components/index";
+import { Skeleton, Box } from "@mui/material";
 import { FaFacebookF, FaTwitter } from "react-icons/fa";
-import { ScanResult } from "@/lib/definitions";
+import { Finding, ScanResult } from "@/lib/definitions";
 import Toast from "@/components/Toast";
 import InsightCard from "@/components/InsightCard";
 
@@ -171,20 +172,37 @@ export default function ScanPage() {
         </div>
         <RiskScoreCircle score={riskScore} />
       </div>
-      {scanResult && scanResult.findings.breaches?.length > 0 && (
+      {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {scanResult.findings.breaches.map((profile) => (
-            <SocialMediaCard key={profile.id} finding={profile} />
+          {fakeScanResult.findings.breaches.map((profile) => (
+            <Skeleton variant="rounded" width="100%" animation="wave">
+              <SocialMediaCard key={profile.id} finding={profile as Finding} />
+            </Skeleton>
           ))}
         </div>
-      )}
-      {scanResult && scanResult.findings.insights?.length > 0 && (
+      ) : scanResult?.findings.breaches.length &&
+        scanResult?.findings.breaches.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+          {scanResult?.findings.breaches.map((profile) => (
+            <SocialMediaCard key={profile.id} finding={profile} />
+          ))}
+          {scanResult.findings.insights.map((insight) => (
+            <InsightCard key={insight.id} insight={insight} />
+          ))}
+        </div>
+      ) : !scanId ? (
+        <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
+          🚫 No scan has been performed yet.
+        </div>
+      ) : null}
+
+      {/* {scanResult && scanResult.findings.insights?.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
           {scanResult.findings.insights.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
           ))}
         </div>
-      )}
+      )} */}
 
       <footer className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6 mt-auto">
         <div className="container mx-auto px-4 text-center space-y-6">
