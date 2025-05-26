@@ -65,12 +65,12 @@ export type Recommendation = {
 
 export type Finding = {
   id: number;
-  scan_id: number;
+  scan_id: string;
   source: string;
   data_type: string;
   data_value: string;
   sensitivity_level: "low" | "medium" | "high"; // adjust if needed
-  breach_date: string | null;
+  // breach_date: string | null;
   context: string | null;
   created_at: string;
   updated_at: string;

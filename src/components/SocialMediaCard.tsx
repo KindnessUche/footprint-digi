@@ -1,7 +1,8 @@
 import { FaTwitter, FaInstagram, FaReddit, FaGlobe } from "react-icons/fa";
 import React from "react";
+import { Finding } from "@/lib/definitions";
 
-const getPlatformIcon = (source) => {
+const getPlatformIcon = (source: string) => {
   if (source.includes("twitter"))
     return <FaTwitter className="text-[#1DA1F2]" />;
   if (source.includes("instagram"))
@@ -10,7 +11,7 @@ const getPlatformIcon = (source) => {
   return <FaGlobe className="text-gray-500" />;
 };
 
-const getSensitivityBadge = (level) => {
+const getSensitivityBadge = (level: string) => {
   const base = "text-xs font-semibold px-2 py-1 rounded-full";
   if (level === "high")
     return `${base} bg-red-100 dark:bg-red-700 dark:text-red-100 text-red-700`;
@@ -19,7 +20,7 @@ const getSensitivityBadge = (level) => {
   return `${base} bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100`;
 };
 
-export default function SocialMediaCard({ finding }) {
+export default function SocialMediaCard({ finding }: { finding: Finding }) {
   const { source, data_value, sensitivity_level, recommendations } = finding;
 
   return (
@@ -44,17 +45,7 @@ export default function SocialMediaCard({ finding }) {
         </h4>
         <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-disc list-inside">
           {recommendations.map((rec) => (
-            <li key={rec.id}>
-              {rec.recommendation}{" "}
-              <a
-                href={rec.action_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
-              >
-                Visit
-              </a>
-            </li>
+            <li key={rec.id}>{rec.recommendation} </li>
           ))}
         </ul>
       </div>
