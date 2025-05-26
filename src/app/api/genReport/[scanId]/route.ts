@@ -8,25 +8,26 @@ export async function POST(req: NextRequest, { params }: any) {
     return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
   }
 
-  const scanId = params.scanId;
+  const scanId = await params.scanId;
 
-  const backendRes = await fetch(
+  const res = await fetch(
     `https://digital-footprint-backend.onrender.com/report/generate/${scanId}`,
     {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
     }
   );
 
-  if (!backendRes.ok) {
-    const errorText = await backendRes.text();
+  if (!res.ok) {
+    const errorText = await res.text();
     return NextResponse.json(
       { error: "Report generation failed", detail: errorText },
-      { status: backendRes.status }
+      { status: res.status }
     );
   }
 
-  const result = await backendRes.json();
+  const result = await res.json();
   return NextResponse.json(result);
 }
