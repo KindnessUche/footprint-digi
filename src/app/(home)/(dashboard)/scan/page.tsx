@@ -29,9 +29,13 @@ export default function ScanPage() {
     setToastSeverity(type);
     setToastOpen(true);
   };
+  const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
+
   const handleScan = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    const scanType = isEmail(input) ? "email" : "username";
+
     try {
       const res = await fetch("/api/scan", {
         method: "POST",
@@ -39,7 +43,7 @@ export default function ScanPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          scan_type: "email",
+          scan_type: scanType,
           scan_value: input,
         }),
       });
@@ -88,13 +92,11 @@ export default function ScanPage() {
 
       const data = await res.json();
       if (res.ok && data.report_url) {
-        // Construct full download URL
         const downloadUrl = `https://digital-footprint-backend.onrender.com${data.report_url}`;
 
-        // Create an anchor tag and click it programmatically
         const link = document.createElement("a");
         link.href = downloadUrl;
-        link.download = "footprint_report.pdf"; // Or any name you prefer
+        link.download = "footprint_report.pdf";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -125,7 +127,7 @@ export default function ScanPage() {
   }, [scanId]);
 
   return (
-    <div className="max-w-7xl mr-auto px-4 min-h-screen">
+    <div className="max-w-7xl mr-auto px-4 flex flex-col mx-auto py-14">
       <Toast
         open={toastOpen}
         setOpen={setToastOpen}
@@ -141,10 +143,10 @@ export default function ScanPage() {
           </p>
           <form className="w-full" onSubmit={handleScan}>
             <input
-              name="email"
-              type="email"
+              name="input"
+              type="text"
               value={input}
-              placeholder="Enter email"
+              placeholder="Enter email or username"
               onChange={(e) => setInput(e.target.value)}
               required
               className="w-full placeholder-neutral-400 dark:placeholder-neutral-600 mb-6 border border-gray-300 dark:border-gray-700 px-4 py-2 rounded focus:outline-none focus:ring-1 focus:ring-[#07B5AD]"
@@ -158,7 +160,7 @@ export default function ScanPage() {
               >
                 {loading ? "Scanning..." : "Start Scan"}
               </button>
-              {scanResult && (
+              {scanResult && !loading && (
                 <button
                   type="button"
                   onClick={handleDownloadReport}
@@ -203,44 +205,6 @@ export default function ScanPage() {
           ))}
         </div>
       )} */}
-
-      <footer className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6 mt-auto">
-        <div className="container mx-auto px-4 text-center space-y-6">
-          <nav className="flex flex-wrap justify-center gap-6 text-sm font-medium">
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              About
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Pricing
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Privacy policy
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Terms and Conditions
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Free checker
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Contact
-            </a>
-          </nav>
-
-          <div className="flex justify-center space-x-6">
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              <FaFacebookF size={18} />
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              <FaTwitter size={18} />
-            </a>
-          </div>
-
-          <p className="text-xs">
-            &copy; 2024 Digital Footprint Check. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

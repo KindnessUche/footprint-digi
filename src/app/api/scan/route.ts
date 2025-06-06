@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         Authorization: `Bearer ${token.value}`, // Attach JWT from cookie
       },
       body: JSON.stringify({
-        scan_type: "email",
+        scan_type: body.scan_type,
         scan_value: body.scan_value,
       }),
     }

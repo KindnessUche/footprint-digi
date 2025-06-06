@@ -2,13 +2,14 @@ import { SearchIcon } from "lucide-react";
 import FeatureGrid from "@/components/card";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
 import { FaFacebookF, FaTwitter } from "react-icons/fa";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -33,11 +34,6 @@ export default function Home() {
             <button className="flex items-center gap-1 cursor-pointer bg-black text-white px-4 py-2 text-sm font-semibold hover:bg-gray-800 transition">
               <SearchIcon size={16} />
               Search
-            </button>
-          </div>
-          <div className="">
-            <button className="flex items-center gap-1 cursor-pointer bg-[#07B5AD] rounded-xl text-white px-4 py-2 text-sm font-semibold transition">
-              Get Started
             </button>
           </div>
         </div>
@@ -137,7 +133,8 @@ export default function Home() {
           </p>
           <div>
             <button className="inline-flex items-center gap-2 bg-[var(--bg-color)] text-black dark:bg-black dark:text-white font-semibold py-2 px-6 rounded-md dark:hover:bg-gray-800 hover:bg-gray-300 transition cursor-pointer">
-              Scan Now <ArrowRight className="w-4 h-4" />
+              <Link href="/scan">Scan Now</Link>{" "}
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </section>
@@ -169,7 +166,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6 transition-colors duration-500 flex flex-col items-center pt-30">
+        {/* <section className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6 transition-colors duration-500 flex flex-col items-center pt-30">
           <h1 className="text-2xl mb-10">Frequently Asked Questions</h1>
           <Accordion
             type="single"
@@ -222,8 +219,8 @@ export default function Home() {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-        </section>
-        <footer className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6">
+        </section> */}
+        {/* <footer className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6">
           <div className="container mx-auto px-4 text-center space-y-6">
             <nav className="flex flex-wrap justify-center gap-6 text-sm font-medium">
               <a
@@ -283,7 +280,7 @@ export default function Home() {
               &copy; 2024 Digital Footprint Check. All rights reserved.
             </p>
           </div>
-        </footer>
+        </footer> */}
       </div>
     </div>
   );

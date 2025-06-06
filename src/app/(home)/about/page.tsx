@@ -54,43 +54,6 @@ export default function AboutPage() {
           should respect your privacy.
         </p>
       </div>
-      <footer className="bg-[var(--bg-color)] dark:bg-[var(--bg-color)] dark:text-white text-black py-16 px-6 mt-20">
-        <div className="container mx-auto px-4 text-center space-y-6">
-          <nav className="flex flex-wrap justify-center gap-6 text-sm font-medium">
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              About
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Pricing
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Privacy policy
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Terms and Conditions
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Free checker
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              Contact
-            </a>
-          </nav>
-
-          <div className="flex justify-center space-x-6">
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              <FaFacebookF size={18} />
-            </a>
-            <a href="#" className="hover:text-[var(--main)] transition-colors">
-              <FaTwitter size={18} />
-            </a>
-          </div>
-
-          <p className="text-xs">
-            &copy; 2024 Digital Footprint Check. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

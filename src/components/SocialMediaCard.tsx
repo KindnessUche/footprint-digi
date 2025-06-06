@@ -3,7 +3,7 @@ import React from "react";
 import { Finding } from "@/lib/definitions";
 
 const getPlatformIcon = (source: string) => {
-  if (source.includes("twitter"))
+  if (source.includes("twitter") || source.includes("x.com"))
     return <FaTwitter className="text-[#1DA1F2]" />;
   if (source.includes("instagram"))
     return <FaInstagram className="text-[#E4405F]" />;

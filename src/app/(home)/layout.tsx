@@ -60,8 +60,6 @@ export default async function RootLayout({
                   <Link href="/">Home</Link>
                   <Link href="/about">About</Link>
                   <Link href="/scan">Scan</Link>
-                  <Link href="/">Blog</Link>
-                  <Link href="/">Contact</Link>
                 </div>
               </div>
               <div className="flex gap-8 justify-center items-center relative mx-2 lg:mx-0">
@@ -69,7 +67,7 @@ export default async function RootLayout({
                 <LogoutButton isLoggedIn={isLoggedIn} />
               </div>
             </div>
-            <div className="bg-[var(--bg-color)] dark:bg-[var(--bg-color)] dark:text-white text-black">
+            <div className="bg-[var(--bg-color)] dark:bg-[var(--bg-color)] dark:text-white text-black h-full min-h-screen">
               {children}
             </div>
           </ThemeProvider>

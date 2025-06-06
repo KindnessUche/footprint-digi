@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Toast from "@/components/Toast";
 
 export default function LogoutButton({ isLoggedIn }: { isLoggedIn: boolean }) {
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn); // Local state to track login status
   const router = useRouter();
   const [open, setOpen] = useState(false); // Controls Snackbar
   const [message, setMessage] = useState("");
@@ -24,6 +25,7 @@ export default function LogoutButton({ isLoggedIn }: { isLoggedIn: boolean }) {
       setTimeout(() => {
         router.push("/");
       }, 1500);
+      setLoggedIn(false);
     } catch (error) {
       setMessage("Logout failed. Please try again.");
       setSeverity("error");
@@ -33,7 +35,7 @@ export default function LogoutButton({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   return (
     <>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <button
           onClick={handleLogout}
           className="px-3 bg-white dark:bg-black border-1 border-slate-200 dark:border-slate-800 rounded-md cursor-pointer"
