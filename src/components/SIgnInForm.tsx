@@ -84,11 +84,6 @@ export default function SignInForm() {
           >
             Sign in
           </button>
-
-          <button className="w-full border py-2 rounded flex justify-center items-center space-x-2">
-            <FcGoogle className="text-xl" />
-            <span>Sign in with Google</span>
-          </button>
         </form>
 
         <div className="text-center text-sm">

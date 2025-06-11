@@ -30,6 +30,9 @@ export default function ScanPage() {
     setToastOpen(true);
   };
   const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
+  const results = scanResult?.findings?.breaches?.length
+    ? scanResult.findings.breaches
+    : scanResult?.findings?.profiles;
 
   const handleScan = async (e: any) => {
     e.preventDefault();
@@ -156,7 +159,11 @@ export default function ScanPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#07B5AD] hover:bg-[#07b5acb5] text-white px-6 py-2 rounded mb-4 cursor-pointer"
+                className={`bg-[#07B5AD] ${
+                  loading
+                    ? " bg-[#07b5ac48] cursor-not-allowed"
+                    : "hover:bg-[#07b5acb5] cursor-pointer"
+                }  text-white px-6 py-2 rounded mb-4 `}
               >
                 {loading ? "Scanning..." : "Start Scan"}
               </button>
@@ -182,29 +189,20 @@ export default function ScanPage() {
             </Skeleton>
           ))}
         </div>
-      ) : scanResult?.findings.breaches.length &&
-        scanResult?.findings.breaches.length > 0 ? (
+      ) : results && results.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {scanResult?.findings.breaches.map((profile) => (
+          {results.map((profile) => (
             <SocialMediaCard key={profile.id} finding={profile} />
           ))}
-          {scanResult.findings.insights.map((insight) => (
+          {/* {results.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
-          ))}
+          ))} */}
         </div>
       ) : !scanId ? (
         <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
           🚫 No scan has been performed yet.
         </div>
       ) : null}
-
-      {/* {scanResult && scanResult.findings.insights?.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {scanResult.findings.insights.map((insight) => (
-            <InsightCard key={insight.id} insight={insight} />
-          ))}
-        </div>
-      )} */}
     </div>
   );
 }

@@ -3,8 +3,8 @@ import React from "react";
 
 export default function InsightCard({ insight }: { insight: Finding }) {
   return (
-    <div className="bg-white shadow-lg rounded-lg p-5 border border-gray-200">
-      <h3 className="text-lg font-semibold text-gray-800 mb-2">
+    <div className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition duration-200">
+      <h3 className="text-lg font-semibold mb-2">
         Insight from: <span className="text-blue-600">{insight.source}</span>
       </h3>
       <p className="text-sm text-gray-700 mb-2">
@@ -22,15 +22,12 @@ export default function InsightCard({ insight }: { insight: Finding }) {
       <p className="text-gray-800 text-sm mb-4">{insight.data_value}</p>
 
       <div>
-        <p className="text-sm font-medium text-gray-800 mb-1">
+        <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">
           Recommendations:
         </p>
-        <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+        <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1">
           {insight.recommendations.map((rec) => (
-            <li key={rec.id}>
-              <span className="font-semibold capitalize">{rec.priority}:</span>{" "}
-              {rec.recommendation}
-            </li>
+            <li key={rec.id}>{rec.recommendation}</li>
           ))}
         </ul>
       </div>

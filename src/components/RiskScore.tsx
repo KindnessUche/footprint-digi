@@ -11,9 +11,9 @@ export default function RiskScoreCircle({ score }: { score: number }) {
         text={`${score}%`}
         styles={buildStyles({
           pathColor:
-            score < 40 ? "#10B981" : score < 70 ? "#F59E0B" : "#EF4444",
+            score < 40 ? "#07B5AD" : score < 70 ? "#F59E0B" : "#EF4444",
           textColor:
-            score < 40 ? "#10B981" : score < 70 ? "#F59E0B" : "#EF4444",
+            score < 40 ? "#07B5AD" : score < 70 ? "#F59E0B" : "#EF4444",
           trailColor: "#374151",
         })}
       />

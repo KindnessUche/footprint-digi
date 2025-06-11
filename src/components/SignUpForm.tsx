@@ -111,11 +111,6 @@ export default function SignUpForm() {
           >
             Sign up
           </button>
-
-          <button className="w-full border py-2 rounded mt-2 flex justify-center items-center space-x-2 cursor-pointer">
-            <FcGoogle className="text-xl" />
-            <span>Sign up with Google</span>
-          </button>
         </form>
 
         <div className="text-center text-sm">

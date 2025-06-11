@@ -138,9 +138,8 @@ export default function Home() {
             </button>
           </div>
         </section>
-        <section className="dark:bg-[var(--bg-color)] bg-[var(--bg-color)]  dark:text-white text-black py-16 px-6">
+        {/* <section className="dark:bg-[var(--bg-color)] bg-[var(--bg-color)]  dark:text-white text-black py-16 px-6">
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-start justify-between gap-10">
-            {/* Text Content */}
             <div className="max-w-2xl">
               <h1 className="text-3xl sm:text-4xl font-extrabold leading-tight mb-4">
                 Free tools to explore your{" "}
@@ -153,8 +152,6 @@ export default function Home() {
                 via data breaches and more.
               </p>
             </div>
-
-            {/* Buttons */}
             <div className="flex flex-wrap gap-4 items-center">
               <button className="bg-black text-white border border-white dark:bg-white dark:text-black  hover:bg-[#0f0f10] font-medium py-2 px-5 rounded-md dark:hover:bg-gray-100 transition cursor-pointer">
                 Profile checker
@@ -164,7 +161,7 @@ export default function Home() {
               </button>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* <section className="bg-[var(--bg-color)] dark:bg-[#0f0f10] dark:text-white text-black py-16 px-6 transition-colors duration-500 flex flex-col items-center pt-30">
           <h1 className="text-2xl mb-10">Frequently Asked Questions</h1>
