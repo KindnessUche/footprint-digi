@@ -39,8 +39,8 @@ export default function ScanPage() {
   const handleScan = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    const scanType = isEmail(input) ? "email" : "username";
-    setScanType(scanType);
+    const inputType = isEmail(input) ? "email" : "username";
+    setScanType(inputType);
     try {
       const res = await fetch("/api/scan", {
         method: "POST",
@@ -48,7 +48,7 @@ export default function ScanPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          scan_type: scanType,
+          scan_type: inputType,
           scan_value: input,
         }),
       });
