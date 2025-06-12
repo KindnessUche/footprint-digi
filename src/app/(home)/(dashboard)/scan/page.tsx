@@ -29,16 +29,18 @@ export default function ScanPage() {
     setToastSeverity(type);
     setToastOpen(true);
   };
+  const [scanType, setScanType] = useState<"email" | "username">("email");
   const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
-  const results = scanResult?.findings?.breaches?.length
-    ? scanResult.findings.breaches
-    : scanResult?.findings?.profiles;
+  const results =
+    scanType === "email"
+      ? scanResult?.findings.breaches
+      : scanResult?.findings?.profiles;
 
   const handleScan = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     const scanType = isEmail(input) ? "email" : "username";
-
+    setScanType(scanType);
     try {
       const res = await fetch("/api/scan", {
         method: "POST",
