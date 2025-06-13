@@ -29,9 +29,18 @@ export default function ScanPage() {
     setToastSeverity(type);
     setToastOpen(true);
   };
+  // const [scanType, setScanType] = useState<"email" | "username">("email");
+  const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
+  // const results =
+  //   scanType === "email"
+  //     ? scanResult?.findings.breaches
+  //     : scanResult?.findings?.profiles;
+
   const handleScan = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    const inputType = isEmail(input) ? "email" : "username";
+    // setScanType(inputType);
     try {
       const res = await fetch("/api/scan", {
         method: "POST",
@@ -39,7 +48,7 @@ export default function ScanPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          scan_type: "email",
+          scan_type: inputType,
           scan_value: input,
         }),
       });
@@ -88,13 +97,11 @@ export default function ScanPage() {
 
       const data = await res.json();
       if (res.ok && data.report_url) {
-        // Construct full download URL
         const downloadUrl = `https://digital-footprint-backend.onrender.com${data.report_url}`;
 
-        // Create an anchor tag and click it programmatically
         const link = document.createElement("a");
         link.href = downloadUrl;
-        link.download = "footprint_report.pdf"; // Or any name you prefer
+        link.download = "footprint_report.pdf";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -116,7 +123,7 @@ export default function ScanPage() {
         const res = await fetch(`/api/scan/${id}`);
         const data = await res.json();
         console.log("Scan Results", data);
-        setScanResult(data); // ✅ store in state
+        setScanResult(data);
       } catch (err) {
         showToast("Error fetching scan results:" + err, "error");
       }
@@ -125,7 +132,7 @@ export default function ScanPage() {
   }, [scanId]);
 
   return (
-    <div className="max-w-7xl mr-auto px-4 min-h-screen">
+    <div className="max-w-7xl mr-auto px-4 flex flex-col mx-auto py-14">
       <Toast
         open={toastOpen}
         setOpen={setToastOpen}
@@ -141,10 +148,10 @@ export default function ScanPage() {
           </p>
           <form className="w-full" onSubmit={handleScan}>
             <input
-              name="email"
-              type="email"
+              name="input"
+              type="text"
               value={input}
-              placeholder="Enter email"
+              placeholder="Enter email or username"
               onChange={(e) => setInput(e.target.value)}
               required
               className="w-full placeholder-neutral-400 dark:placeholder-neutral-600 mb-6 border border-gray-300 dark:border-gray-700 px-4 py-2 rounded focus:outline-none focus:ring-1 focus:ring-[#07B5AD]"
@@ -154,11 +161,15 @@ export default function ScanPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#07B5AD] hover:bg-[#07b5acb5] text-white px-6 py-2 rounded mb-4 cursor-pointer"
+                className={`bg-[#07B5AD] ${
+                  loading
+                    ? " bg-[#07b5ac48] cursor-not-allowed"
+                    : "hover:bg-[#07b5acb5] cursor-pointer"
+                }  text-white px-6 py-2 rounded mb-4 `}
               >
                 {loading ? "Scanning..." : "Start Scan"}
               </button>
-              {scanResult && (
+              {scanResult && !loading && (
                 <button
                   type="button"
                   onClick={handleDownloadReport}
@@ -172,18 +183,15 @@ export default function ScanPage() {
         </div>
         <RiskScoreCircle score={riskScore} />
       </div>
-      {loading ? (
+      {scanResult &&
+      (scanResult?.findings?.breaches?.length > 0 ||
+        scanResult?.findings?.profiles?.length > 0) ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {fakeScanResult.findings.breaches.map((profile) => (
-            <Skeleton variant="rounded" width="100%" animation="wave">
-              <SocialMediaCard key={profile.id} finding={profile as Finding} />
-            </Skeleton>
+          {scanResult?.findings?.breaches?.map((breach) => (
+            <SocialMediaCard key={breach.id} finding={breach} />
           ))}
-        </div>
-      ) : scanResult?.findings.breaches.length &&
-        scanResult?.findings.breaches.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {scanResult?.findings.breaches.map((profile) => (
+
+          {scanResult?.findings?.profiles?.map((profile) => (
             <SocialMediaCard key={profile.id} finding={profile} />
           ))}
         </div>
@@ -191,7 +199,11 @@ export default function ScanPage() {
         <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
           🚫 No scan has been performed yet.
         </div>
-      ) : null}
+      ) : (
+        <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
+          ✅ Scan completed, but no breaches or profiles found.
+        </div>
+      )}
     </div>
   );
 }
