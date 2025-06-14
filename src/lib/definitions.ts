@@ -57,7 +57,7 @@ export type Recommendation = {
   id: number;
   finding_id: number;
   recommendation: string;
-  action_url: string;
+  // action_url: string;
   priority: "low" | "medium" | "high"; // adjust if needed
   created_at: string;
   updated_at: string;
@@ -78,8 +78,8 @@ export type Finding = {
 };
 
 export type FindingsGroup = {
-  breaches: Finding[];
-  profiles: Finding[];
+  breaches: Finding[] | [];
+  profiles: Finding[] | [];
   exposed_data: Finding[];
   insights: Finding[];
   other: Finding[];
