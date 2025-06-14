@@ -29,18 +29,19 @@ export default function ScanPage() {
     setToastSeverity(type);
     setToastOpen(true);
   };
-  // const [scanType, setScanType] = useState<"email" | "username">("email");
+  const [scanType, setScanType] = useState<"email" | "username">("email");
   const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
-  // const results =
-  //   scanType === "email"
-  //     ? scanResult?.findings.breaches
-  //     : scanResult?.findings?.profiles;
+  const results: Finding[] | null = scanResult
+    ? scanType === "email"
+      ? scanResult?.findings.breaches
+      : scanResult?.findings?.profiles
+    : null;
 
   const handleScan = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     const inputType = isEmail(input) ? "email" : "username";
-    // setScanType(inputType);
+    setScanType(inputType);
     try {
       const res = await fetch("/api/scan", {
         method: "POST",
@@ -123,7 +124,7 @@ export default function ScanPage() {
         const res = await fetch(`/api/scan/${id}`);
         const data = await res.json();
         console.log("Scan Results", data);
-        setScanResult(data);
+        setScanResult(data); // ✅ store in state
       } catch (err) {
         showToast("Error fetching scan results:" + err, "error");
       }
@@ -183,27 +184,28 @@ export default function ScanPage() {
         </div>
         <RiskScoreCircle score={riskScore} />
       </div>
-      {scanResult &&
-      (scanResult?.findings?.breaches?.length > 0 ||
-        scanResult?.findings?.profiles?.length > 0) ? (
+      {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {scanResult?.findings?.breaches?.map((breach) => (
-            <SocialMediaCard key={breach.id} finding={breach} />
+          {fakeScanResult.findings.breaches.map((profile) => (
+            <Skeleton variant="rounded" width="100%" animation="wave">
+              <SocialMediaCard key={profile.id} finding={profile as Finding} />
+            </Skeleton>
           ))}
-
-          {scanResult?.findings?.profiles?.map((profile) => (
+        </div>
+      ) : results && results.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+          {results.map((profile) => (
             <SocialMediaCard key={profile.id} finding={profile} />
           ))}
+          {/* {results.map((insight) => (
+            <InsightCard key={insight.id} insight={insight} />
+          ))} */}
         </div>
       ) : !scanId ? (
         <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
           🚫 No scan has been performed yet.
         </div>
-      ) : (
-        <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
-          ✅ Scan completed, but no breaches or profiles found.
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }
