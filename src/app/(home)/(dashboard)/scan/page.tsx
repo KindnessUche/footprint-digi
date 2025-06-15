@@ -71,8 +71,12 @@ export default function ScanPage() {
         alert("Scan failed: " + data.message);
         showToast("An error occurred while scanning.", "error");
       }
-    } catch (err) {
-      console.error("Scan error:", err);
+    } catch (err: any) {
+      console.error("Scan error:", err.message || err);
+      showToast(
+        "Error fetching scan results: " + (err.message || err),
+        "error"
+      );
     } finally {
       setLoading(false);
     }
