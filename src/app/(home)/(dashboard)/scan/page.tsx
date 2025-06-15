@@ -65,10 +65,10 @@ export default function ScanPage() {
 
       if (res.ok) {
         setScanId(data.scan_id);
-        showToast("Scan started successfully!", "success");
+        showToast("Scan completed successfully!", "success");
         console.log("Scan id:", scanId);
       } else {
-        // alert("Scan failed: " + data.message);
+        alert("Scan failed: " + data.message);
         showToast("An error occurred while scanning.", "error");
       }
     } catch (err) {
