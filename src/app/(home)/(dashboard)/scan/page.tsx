@@ -33,7 +33,7 @@ export default function ScanPage() {
   const isEmail = (value: string) => /\S+@\S+\.\S+/.test(value);
   const results: Finding[] | null = scanResult
     ? scanType === "email"
-      ? scanResult?.findings.breaches
+      ? scanResult?.findings?.breaches
       : scanResult?.findings?.profiles
     : null;
 
@@ -196,15 +196,18 @@ export default function ScanPage() {
             </Skeleton>
           ))}
         </div>
-      ) : results && results.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {results.map((profile) => (
-            <SocialMediaCard key={profile.id} finding={profile} />
-          ))}
-          {/* {results.map((insight) => (
-            <InsightCard key={insight.id} insight={insight} />
-          ))} */}
-        </div>
+      ) : scanResult ? (
+        results && results.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+            {results.map((profile) => (
+              <SocialMediaCard key={profile.id} finding={profile} />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-12 text-center text-gray-600 dark:text-gray-400 ">
+            No breach or public profile data found. You're good!
+          </div>
+        )
       ) : !scanId ? (
         <div className="mt-12 text-center text-gray-600 dark:text-gray-400">
           🚫 No scan has been performed yet.

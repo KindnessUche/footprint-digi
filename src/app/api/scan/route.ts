@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token.value}`, // Attach JWT from cookie
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify({
         scan_type: body.scan_type,
